@@ -1,6 +1,9 @@
-package store.domain;
+package store.domain.inventory;
 
-public class ProductInventory {
+import camp.nextstep.edu.missionutils.DateTimes;
+import store.domain.Inventory;
+
+public class ProductInventory implements Inventory {
 
     private final Promotion promotion;
     private final int price;
@@ -12,10 +15,17 @@ public class ProductInventory {
         this.currentCount = currentCount;
     }
 
+    @Override
     public boolean isValidPromotion() {
-        return promotion.isValid();
+        return promotion.isPromotePeriod(DateTimes.now().toLocalDate());
     }
 
+    @Override
+    public boolean isExistProduct() {
+        return currentCount > 0;
+    }
+
+    @Override
     public int getCurrentCount() {
         return currentCount;
     }

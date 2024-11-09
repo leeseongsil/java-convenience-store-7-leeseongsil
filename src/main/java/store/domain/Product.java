@@ -1,5 +1,7 @@
 package store.domain;
 
+import store.domain.inventory.ProductInventory;
+
 public class Product {
 
     private final String name;
@@ -7,21 +9,9 @@ public class Product {
     private final ProductInventory noPromotionInventory;
 
     public Product(String name, ProductInventory promotionInventory, ProductInventory noPromotionInventory) {
-        validatePromotionInventory(promotionInventory, noPromotionInventory);
-
         this.name = name;
         this.promotionInventory = promotionInventory;
         this.noPromotionInventory = noPromotionInventory;
-    }
-
-    private void validatePromotionInventory(ProductInventory promotionInventory,
-                                            ProductInventory noPromotionInventory) {
-        if (!promotionInventory.isValidPromotion()) {
-            throw new IllegalArgumentException("정가로 구매하는 상품들이 필요로 합니다");
-        }
-        if (noPromotionInventory.isValidPromotion()) {
-            throw new IllegalArgumentException("정가로 구매하는 상품들이 필요로 합니다");
-        }
     }
 
     public boolean canBuy(int count) {
@@ -38,5 +28,13 @@ public class Product {
 
     private int totalCount() {
         return promotionInventory.getCurrentCount() + noPromotionInventory.getCurrentCount();
+    }
+
+    public boolean isExistPromotedProduct() {
+        return promotionInventory.isExistProduct();
+    }
+
+    public int countOfRegularPriceProduct(int requireCount) {
+        return requireCount - promotionInventory.getCurrentCount();
     }
 }

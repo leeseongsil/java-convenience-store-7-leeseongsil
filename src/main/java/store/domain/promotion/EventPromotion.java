@@ -1,13 +1,12 @@
-package store.domain;
+package store.domain.promotion;
 
 import java.time.LocalDate;
+import store.domain.inventory.Promotion;
 
-public class Promotion {
+public class EventPromotion implements Promotion {
 
     private static final int MIN_GET_COUNT = 0;
     private static final int MAX_GET_COUNT = 1;
-
-    private static final Promotion NO_PROMOTION = new Promotion("", 1, 0, LocalDate.MIN, LocalDate.MIN);
 
     private final String name;
     private final int buyCount;
@@ -15,7 +14,7 @@ public class Promotion {
     private final LocalDate startDate;
     private final LocalDate endDate;
 
-    public Promotion(String name, int buyCount, int getCount, LocalDate startDate, LocalDate endDate) {
+    public EventPromotion(String name, int buyCount, int getCount, LocalDate startDate, LocalDate endDate) {
         validateGetCount(getCount);
         validateDates(startDate, endDate);
 
@@ -24,10 +23,6 @@ public class Promotion {
         this.getCount = getCount;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public static Promotion noPromotion() {
-        return NO_PROMOTION;
     }
 
     private void validateGetCount(int getCount) {
@@ -42,7 +37,13 @@ public class Promotion {
         }
     }
 
-    public boolean canPromote(LocalDate currentDate) {
+    @Override
+    public boolean canPromote(LocalDate currentDate, int currentCount) {
+        return isPromotePeriod(currentDate) && currentCount < getCount;
+    }
+
+    @Override
+    public boolean isPromotePeriod(LocalDate currentDate) {
         return isAfterOrEqualToStartDate(currentDate) && isBeforeOrEqualToEndDate(currentDate);
     }
 
@@ -52,9 +53,5 @@ public class Promotion {
 
     private boolean isBeforeOrEqualToEndDate(LocalDate currentDate) {
         return currentDate.isBefore(endDate) || currentDate.isEqual(endDate);
-    }
-
-    public boolean isValid() {
-        return getCount != 0;
     }
 }

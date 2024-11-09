@@ -5,17 +5,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
+import store.domain.inventory.ProductInventory;
+import store.domain.inventory.Promotion;
+import store.domain.promotion.EventPromotion;
+import store.domain.promotion.RegularPricePromotion;
 
 class ProductTest {
 
     private static final LocalDate START_DATE = LocalDate.of(2024, 1, 1);
     private static final LocalDate END_DATE = LocalDate.of(2024, 1, 31);
-    private static final Promotion ONE_PLUS_ONE = new Promotion("1+1", 1, 1, START_DATE, END_DATE);
+    private static final Promotion ONE_PLUS_ONE = new EventPromotion("1+1", 1, 1, START_DATE, END_DATE);
+    private static final Promotion REGULAR_PRICE = new RegularPricePromotion();
 
     @Test
     void canBuyTest_hasEqualOrMoreThanNeed_returnTrue() {
         ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(Promotion.noPromotion(), 1_000, 2);
+        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
         Product product = new Product("상품", promotionInventory, noPromotionInventory);
 
         boolean actual = product.canBuy(5);
@@ -26,7 +31,7 @@ class ProductTest {
     @Test
     void canBuyTest_hasLessThanNeed_returnFalse() {
         ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(Promotion.noPromotion(), 1_000, 2);
+        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
         Product product = new Product("상품", promotionInventory, noPromotionInventory);
 
         boolean actual = product.canBuy(6);
@@ -37,7 +42,7 @@ class ProductTest {
     @Test
     void buyTest_hasEqualOrMoreThanNeed() {
         ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(Promotion.noPromotion(), 1_000, 2);
+        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
         Product product = new Product("상품", promotionInventory, noPromotionInventory);
 
         product.buy(3);
@@ -48,7 +53,7 @@ class ProductTest {
     @Test
     void buyTest_hasLessThanNeed_throwException() {
         ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(Promotion.noPromotion(), 1_000, 2);
+        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
         Product product = new Product("상품", promotionInventory, noPromotionInventory);
 
         assertThatThrownBy(() -> product.buy(6))
