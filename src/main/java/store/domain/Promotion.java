@@ -4,9 +4,11 @@ import java.time.LocalDate;
 
 public class Promotion {
 
-
     private static final int MIN_GET_COUNT = 0;
     private static final int MAX_GET_COUNT = 1;
+
+    private static final Promotion NO_PROMOTION = new Promotion("", 1, 0, LocalDate.MIN, LocalDate.MIN);
+
     private final String name;
     private final int buyCount;
     private final int getCount;
@@ -22,6 +24,10 @@ public class Promotion {
         this.getCount = getCount;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public static Promotion noPromotion() {
+        return NO_PROMOTION;
     }
 
     private void validateGetCount(int getCount) {
@@ -46,5 +52,9 @@ public class Promotion {
 
     private boolean isBeforeOrEqualToEndDate(LocalDate currentDate) {
         return currentDate.isBefore(endDate) || currentDate.isEqual(endDate);
+    }
+
+    public boolean isValid() {
+        return getCount != 0;
     }
 }
