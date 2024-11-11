@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +24,8 @@ public class InputView {
     private static final String INPUT_EMPTY_PROMOTION = "null";
 
     private static final Pattern PRODUCTS_PATTERN = Pattern.compile("\\[([^]]+)-([0-9]+)]");
+
+    private static final Map<String, Boolean> INPUT_TO_BOOLEAN = Map.of("Y", Boolean.TRUE, "N", Boolean.FALSE);
 
     private InputView() {
     }
@@ -92,12 +95,35 @@ public class InputView {
         return result;
     }
 
+    public boolean inputCanPromote(String productName, int count) {
+        System.out.printf("%n현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)%n", productName, count);
+        return toBoolean(readConsole());
+    }
+
+    public boolean inputProgressPurchaseWhenNotPromoted(String productName, int count) {
+        System.out.printf("%n현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)%n", productName, count);
+        return toBoolean(readConsole());
+    }
+
+    public boolean inputUsingMembership() {
+        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        return toBoolean(readConsole());
+    }
+
     private static int toInt(String input) {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("숫자를 입력해야 합니다 input : " + input, e);
         }
+    }
+
+    private static boolean toBoolean(String input) {
+        Boolean result = INPUT_TO_BOOLEAN.get(input);
+        if (result == null) {
+            throw new IllegalArgumentException("잘못된 입력입니다. 다시 입력해 주세요.");
+        }
+        return result;
     }
 
     private static String readConsole() {
