@@ -5,6 +5,7 @@ public class PurchaseHistory {
     private final String name;
     private final int regularCount;
     private final int freeCount;
+    private final int pricePerCount;
     private final int basePrice;
     private final int eventDiscountPrice;
 
@@ -12,20 +13,23 @@ public class PurchaseHistory {
         this.name = name;
         this.regularCount = regularCount;
         this.freeCount = freeCount;
+        this.pricePerCount = pricePerCount;
         this.basePrice = pricePerCount * (regularCount + freeCount);
         this.eventDiscountPrice = pricePerCount * freeCount;
     }
 
-    public PurchaseHistory(String name, int regularCount, int freeCount, int basePrice, int eventDiscountPrice) {
+    public PurchaseHistory(String name, int regularCount, int freeCount, int pricePerCount, int basePrice,
+                           int eventDiscountPrice) {
         this.name = name;
         this.regularCount = regularCount;
         this.freeCount = freeCount;
+        this.pricePerCount = pricePerCount;
         this.basePrice = basePrice;
         this.eventDiscountPrice = eventDiscountPrice;
     }
 
     public static PurchaseHistory emptyHistory(String name) {
-        return new PurchaseHistory(name, 0, 0, 0, 0);
+        return new PurchaseHistory(name, 0, 0, 0);
     }
 
     public PurchaseHistory join(PurchaseHistory history) {
@@ -35,8 +39,8 @@ public class PurchaseHistory {
         int totalFreeCount = this.freeCount + history.freeCount;
         int totalBasePrice = this.basePrice + history.basePrice;
         int totalEventDiscountPrice = this.eventDiscountPrice + history.eventDiscountPrice;
-        return new PurchaseHistory(
-                this.name, totalRegularCount, totalFreeCount, totalBasePrice, totalEventDiscountPrice);
+        return new PurchaseHistory(this.name,
+                totalRegularCount, totalFreeCount, this.pricePerCount, totalBasePrice, totalEventDiscountPrice);
     }
 
     private void validateSameName(String name, String otherName) {
@@ -47,5 +51,29 @@ public class PurchaseHistory {
 
     public int getNotAppliedPromotionPrice() {
         return basePrice - eventDiscountPrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getRegularCount() {
+        return regularCount;
+    }
+
+    public int getFreeCount() {
+        return freeCount;
+    }
+
+    public int getPricePerCount() {
+        return pricePerCount;
+    }
+
+    public int getBasePrice() {
+        return basePrice;
+    }
+
+    public int getEventDiscountPrice() {
+        return eventDiscountPrice;
     }
 }

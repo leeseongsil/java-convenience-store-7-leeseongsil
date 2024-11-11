@@ -17,4 +17,34 @@ public class Receipt {
     public Receipt(List<PurchaseHistory> histories) {
         this(histories, DEFAULT_DISCOUNT_PRICE);
     }
+
+    public List<PurchaseHistory> getHistories() {
+        return histories;
+    }
+
+    public int totalRegularCount() {
+        return histories.stream()
+                .mapToInt(PurchaseHistory::getRegularCount)
+                .sum();
+    }
+
+    public int totalBasePrice() {
+        return histories.stream()
+                .mapToInt(PurchaseHistory::getBasePrice)
+                .sum();
+    }
+
+    public int totalEventDiscountPrice() {
+        return histories.stream()
+                .mapToInt(PurchaseHistory::getEventDiscountPrice)
+                .sum();
+    }
+
+    public int finalPrice() {
+        return totalRegularCount() - totalEventDiscountPrice() - membershipDiscountPrice;
+    }
+
+    public int getMembershipDiscountPrice() {
+        return membershipDiscountPrice;
+    }
 }
