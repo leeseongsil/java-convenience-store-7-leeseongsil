@@ -58,7 +58,7 @@ public class ProductInventory implements Inventory {
     @Override
     public int countRemainedRegularPriceProducts(int purchaseCount) {
         int remainCount = currentCount - purchaseCount;
-        int promotionCount =  promotion.calculateRemainedRegularPriceProducts(purchaseCount);
+        int promotionCount = promotion.calculateRemainedRegularPriceProducts(purchaseCount);
         return Math.min(remainCount, promotionCount);
     }
 

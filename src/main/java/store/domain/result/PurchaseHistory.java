@@ -44,4 +44,8 @@ public class PurchaseHistory {
             throw new IllegalArgumentException("이름이 같은 내역만 합칠 수 있습니다");
         }
     }
+
+    public int getNotAppliedPromotionPrice() {
+        return basePrice - eventDiscountPrice;
+    }
 }
