@@ -1,7 +1,9 @@
 package store.domain.inventory;
 
+import java.util.Optional;
 import store.domain.Inventory;
 import store.domain.result.PurchaseHistory;
+import store.dto.ProductResponseDto;
 
 public class EmptyInventory implements Inventory {
 
@@ -38,5 +40,10 @@ public class EmptyInventory implements Inventory {
     @Override
     public PurchaseHistory buy(String name, int count) {
         return PurchaseHistory.emptyHistory(name);
+    }
+
+    @Override
+    public Optional<ProductResponseDto> getProductResponse(String productName) {
+        return Optional.empty();
     }
 }

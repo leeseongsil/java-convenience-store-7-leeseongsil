@@ -1,9 +1,11 @@
 package store.domain.inventory;
 
 import camp.nextstep.edu.missionutils.DateTimes;
+import java.util.Optional;
 import store.domain.Inventory;
 import store.domain.result.PromotionResult;
 import store.domain.result.PurchaseHistory;
+import store.dto.ProductResponseDto;
 
 public class ProductInventory implements Inventory {
 
@@ -83,5 +85,10 @@ public class ProductInventory implements Inventory {
         if (currentCount < count) {
             throw new IllegalStateException("현재 재고 양이 부족합니다");
         }
+    }
+
+    @Override
+    public Optional<ProductResponseDto> getProductResponse(String productName) {
+        return Optional.of(new ProductResponseDto(productName, price, currentCount, promotion.getName()));
     }
 }

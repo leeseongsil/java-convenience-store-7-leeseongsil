@@ -12,4 +12,6 @@ public interface Promotion {
     int calculateRemainedRegularPriceProducts(int purchaseCount);
 
     PromotionResult calculatePromotion(int count);
+
+    String getName();
 }

@@ -1,6 +1,8 @@
 package store.domain;
 
+import java.util.Optional;
 import store.domain.result.PurchaseHistory;
+import store.dto.ProductResponseDto;
 
 public interface Inventory {
 
@@ -17,4 +19,6 @@ public interface Inventory {
     int countRemainedRegularPriceProducts(int purchaseCount);
 
     PurchaseHistory buy(String name, int count);
+
+    Optional<ProductResponseDto> getProductResponse(String productName);
 }

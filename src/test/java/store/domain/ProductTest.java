@@ -13,7 +13,7 @@ import store.domain.promotion.RegularPricePromotion;
 class ProductTest {
 
     private static final LocalDate START_DATE = LocalDate.of(2024, 1, 1);
-    private static final LocalDate END_DATE = LocalDate.of(2024, 1, 31);
+    private static final LocalDate END_DATE = LocalDate.of(2024, 12, 31);
     private static final Promotion ONE_PLUS_ONE = new EventPromotion("1+1", 1, 1, START_DATE, END_DATE);
     private static final Promotion REGULAR_PRICE = new RegularPricePromotion();
 

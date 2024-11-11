@@ -59,4 +59,9 @@ public class EventPromotion implements Promotion {
         int regularCount = count - freeCount;
         return new PromotionResult(regularCount, freeCount);
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

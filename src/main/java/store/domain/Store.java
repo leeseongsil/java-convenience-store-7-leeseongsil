@@ -7,6 +7,7 @@ import store.domain.require.RequireDetail;
 import store.domain.require.RequireDetails;
 import store.domain.result.PurchaseHistory;
 import store.domain.result.Receipt;
+import store.dto.ProductResponseDto;
 
 public class Store {
 
@@ -33,5 +34,12 @@ public class Store {
         return products.computeIfAbsent(name, key -> {
             throw new IllegalArgumentException("존재하지 않는 상품입니다. 다시 입력해 주세요.");
         });
+    }
+
+    public List<ProductResponseDto> getProductResponses() {
+        return products.values().stream()
+                .map(Product::getProductResponses)
+                .flatMap(List::stream)
+                .toList();
     }
 }

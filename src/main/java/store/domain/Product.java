@@ -1,6 +1,10 @@
 package store.domain;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 import store.domain.result.PurchaseHistory;
+import store.dto.ProductResponseDto;
 
 public class Product {
 
@@ -51,5 +55,12 @@ public class Product {
         if (!canBuy(count)) {
             throw new IllegalStateException("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
+    }
+
+    public List<ProductResponseDto> getProductResponses() {
+        return Stream.of(promotionInventory, noPromotionInventory)
+                .map(inventory -> inventory.getProductResponse(name))
+                .flatMap(Optional::stream)
+                .toList();
     }
 }

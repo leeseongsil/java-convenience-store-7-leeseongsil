@@ -6,6 +6,8 @@ import store.domain.result.PromotionResult;
 
 public class RegularPricePromotion implements Promotion {
 
+    private static final String EMPTY_NAME = "";
+
     @Override
     public boolean isPromotionPeriod(LocalDate currentDate) {
         return false;
@@ -24,5 +26,10 @@ public class RegularPricePromotion implements Promotion {
     @Override
     public PromotionResult calculatePromotion(int count) {
         return new PromotionResult(count, 0);
+    }
+
+    @Override
+    public String getName() {
+        return EMPTY_NAME;
     }
 }
