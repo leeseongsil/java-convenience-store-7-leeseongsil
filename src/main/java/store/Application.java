@@ -1,6 +1,5 @@
 package store;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 import store.domain.Store;
 import store.domain.require.RequireDetail;
@@ -16,8 +15,7 @@ public class Application {
     public static void main(String[] args) {
         OutputView.printProducts(STORE.getProductResponses());
 
-        RequireDetails requireDetails = new RequireDetails(InputView.inputPurchaseProducts());
-        STORE.validateProducts(requireDetails);
+        RequireDetails requireDetails = retryWhenThrowException(Application::inputRequireDetails);
 
         for (RequireDetail detail : requireDetails.details()) {
             String productName = detail.getName();
@@ -41,20 +39,16 @@ public class Application {
         OutputView.printReceipt(receipt);
     }
 
+    private static RequireDetails inputRequireDetails() {
+        RequireDetails requireDetails = new RequireDetails(InputView.inputPurchaseProducts());
+        STORE.validateProducts(requireDetails);
+        return requireDetails;
+    }
+
     private static <T> T retryWhenThrowException(Supplier<T> supplier) {
         while (true) {
             try {
                 return supplier.get();
-            } catch (IllegalArgumentException exception) {
-                OutputView.printExceptionMessage(exception);
-            }
-        }
-    }
-
-    private static <T, R> R retryWhenThrowException(Function<T, R> function, T argument) {
-        while (true) {
-            try {
-                return function.apply(argument);
             } catch (IllegalArgumentException exception) {
                 OutputView.printExceptionMessage(exception);
             }
