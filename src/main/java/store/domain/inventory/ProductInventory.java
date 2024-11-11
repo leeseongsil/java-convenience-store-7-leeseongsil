@@ -2,6 +2,8 @@ package store.domain.inventory;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import store.domain.Inventory;
+import store.domain.result.PromotionResult;
+import store.domain.result.PurchaseHistory;
 
 public class ProductInventory implements Inventory {
 
@@ -16,7 +18,7 @@ public class ProductInventory implements Inventory {
     }
 
     @Override
-    public boolean isValidPromotion() {
+    public boolean isInPeriod() {
         return promotion.isPromotionPeriod(DateTimes.now().toLocalDate());
     }
 
@@ -26,7 +28,41 @@ public class ProductInventory implements Inventory {
     }
 
     @Override
-    public int getCurrentCount() {
-        return currentCount;
+    public int countPurchasableProducts() {
+        if (isInPeriod()) {
+            return currentCount;
+        }
+        return 0;
+    }
+
+    @Override
+    public int countPurchasableProducts(int purchaseCount) {
+        if (isInPeriod()) {
+            return Math.min(purchaseCount, currentCount);
+        }
+        return 0;
+    }
+
+    @Override
+    public PurchaseHistory buy(String name, int count) {
+        validateBuying(count);
+        if (!isInPeriod()) {
+            return PurchaseHistory.emptyHistory(name);
+        }
+
+        PromotionResult promotionResult = promotion.calculatePromotion(count);
+        PurchaseHistory history =
+                new PurchaseHistory(name, promotionResult.regularCount(), promotionResult.freeCount(), price);
+        currentCount -= count;
+        return history;
+    }
+
+    private void validateBuying(int count) {
+        if (!isInPeriod()) {
+            throw new IllegalStateException("프로모션 기간이 지났습니다");
+        }
+        if (currentCount < count) {
+            throw new IllegalStateException("현재 재고 양이 부족합니다");
+        }
     }
 }
