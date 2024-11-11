@@ -38,9 +38,10 @@ public class PurchaseHistory {
         int totalRegularCount = this.regularCount + history.regularCount;
         int totalFreeCount = this.freeCount + history.freeCount;
         int totalBasePrice = this.basePrice + history.basePrice;
+        int pricePerCount = Math.max(this.pricePerCount, history.pricePerCount);
         int totalEventDiscountPrice = this.eventDiscountPrice + history.eventDiscountPrice;
         return new PurchaseHistory(this.name,
-                totalRegularCount, totalFreeCount, this.pricePerCount, totalBasePrice, totalEventDiscountPrice);
+                totalRegularCount, totalFreeCount, pricePerCount, totalBasePrice, totalEventDiscountPrice);
     }
 
     private void validateSameName(String name, String otherName) {
@@ -53,24 +54,20 @@ public class PurchaseHistory {
         return basePrice - eventDiscountPrice;
     }
 
+    public int getTotalCount() {
+        return regularCount + freeCount;
+    }
+
     public String getName() {
         return name;
     }
 
-    public int getRegularCount() {
-        return regularCount;
+    public int getBasePrice() {
+        return basePrice;
     }
 
     public int getFreeCount() {
         return freeCount;
-    }
-
-    public int getPricePerCount() {
-        return pricePerCount;
-    }
-
-    public int getBasePrice() {
-        return basePrice;
     }
 
     public int getEventDiscountPrice() {

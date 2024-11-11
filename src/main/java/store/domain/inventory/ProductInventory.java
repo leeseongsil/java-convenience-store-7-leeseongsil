@@ -79,9 +79,6 @@ public class ProductInventory implements Inventory {
     }
 
     private void validateBuying(int count) {
-        if (!isInPeriod()) {
-            throw new IllegalStateException("프로모션 기간이 지났습니다");
-        }
         if (currentCount < count) {
             throw new IllegalStateException("현재 재고 양이 부족합니다");
         }

@@ -10,7 +10,7 @@ public class RegularPricePromotion implements Promotion {
 
     @Override
     public boolean isPromotionPeriod(LocalDate currentDate) {
-        return false;
+        return true;
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +38,7 @@ public class InputView {
     private static Map<String, PromotionDto> inputPromotions() {
         return FileInput.readAllLines(PROMOTIONS_FILE_NAME)
                 .stream()
+                .skip(1)
                 .map(InputView::toPromotion)
                 .collect(toMap(PromotionDto::name, Function.identity()));
     }
@@ -56,6 +56,7 @@ public class InputView {
     private static List<ProductDto> inputProducts(Map<String, PromotionDto> promotions) {
         return FileInput.readAllLines(PRODUCTS_FILE_NAME)
                 .stream()
+                .skip(1)
                 .map(input -> toProduct(input, promotions))
                 .toList();
     }
@@ -71,12 +72,14 @@ public class InputView {
     }
 
     private static PromotionDto findPromotion(String promotionName, Map<String, PromotionDto> promotions) {
-        if (promotionName.equals(INPUT_EMPTY_PROMOTION)) {
+        if (promotionName.trim().equals(INPUT_EMPTY_PROMOTION)) {
             return PromotionDto.emptyPromotion();
         }
-        return promotions.computeIfAbsent(promotionName, key -> {
+        PromotionDto promotion = promotions.get(promotionName);
+        if (promotion == null) {
             throw new IllegalArgumentException("해당 프로모션이 존재하지 않습니다");
-        });
+        }
+        return promotion;
     }
 
     public static Map<String, Integer> inputPurchaseProducts() {
@@ -95,18 +98,18 @@ public class InputView {
         return result;
     }
 
-    public boolean inputCanPromote(String productName, int count) {
+    public static boolean inputCanPromote(String productName, int count) {
         System.out.printf("%n현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)%n", productName, count);
         return toBoolean(readConsole());
     }
 
-    public boolean inputProgressPurchaseWhenNotPromoted(String productName, int count) {
+    public static boolean inputProgressPurchaseWhenNotPromoted(String productName, int count) {
         System.out.printf("%n현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)%n", productName, count);
         return toBoolean(readConsole());
     }
 
-    public boolean inputUsingMembership() {
-        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+    public static boolean inputUsingMembership() {
+        System.out.println("\n멤버십 할인을 받으시겠습니까? (Y/N)");
         return toBoolean(readConsole());
     }
 

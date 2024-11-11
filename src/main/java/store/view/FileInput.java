@@ -19,7 +19,8 @@ public class FileInput {
                 throw new IllegalStateException("해당 파일을 읽을 수 없습니다 : " + fileName);
             }
 
-            return reader.lines().toList();
+            return reader.lines()
+                    .toList();
         } catch (NullPointerException | IOException e) {
             throw new IllegalStateException("해당 파일을 읽을 수 없습니다 : " + fileName, e);
         }

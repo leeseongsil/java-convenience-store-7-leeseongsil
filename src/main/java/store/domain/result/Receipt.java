@@ -22,9 +22,9 @@ public class Receipt {
         return histories;
     }
 
-    public int totalRegularCount() {
+    public int totalCount() {
         return histories.stream()
-                .mapToInt(PurchaseHistory::getRegularCount)
+                .mapToInt(PurchaseHistory::getTotalCount)
                 .sum();
     }
 
@@ -41,7 +41,7 @@ public class Receipt {
     }
 
     public int finalPrice() {
-        return totalRegularCount() - totalEventDiscountPrice() - membershipDiscountPrice;
+        return totalBasePrice() - totalEventDiscountPrice() - membershipDiscountPrice;
     }
 
     public int getMembershipDiscountPrice() {
