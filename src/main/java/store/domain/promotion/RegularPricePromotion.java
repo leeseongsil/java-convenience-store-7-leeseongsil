@@ -6,12 +6,7 @@ import store.domain.inventory.Promotion;
 public class RegularPricePromotion implements Promotion {
 
     @Override
-    public boolean canPromote(LocalDate currentDate, int currentCount) {
-        return false;
-    }
-
-    @Override
-    public boolean isPromotePeriod(LocalDate currentDate) {
+    public boolean isPromotionPeriod(LocalDate currentDate) {
         return false;
     }
 }

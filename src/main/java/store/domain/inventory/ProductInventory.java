@@ -17,7 +17,7 @@ public class ProductInventory implements Inventory {
 
     @Override
     public boolean isValidPromotion() {
-        return promotion.isPromotePeriod(DateTimes.now().toLocalDate());
+        return promotion.isPromotionPeriod(DateTimes.now().toLocalDate());
     }
 
     @Override
