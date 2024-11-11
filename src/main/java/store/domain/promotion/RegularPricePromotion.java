@@ -12,8 +12,13 @@ public class RegularPricePromotion implements Promotion {
     }
 
     @Override
-    public int countFreeProductsWhenPurchased(int purchaseCount) {
+    public int calculateFreeProducts(int purchaseCount) {
         return 0;
+    }
+
+    @Override
+    public int calculateRemainedRegularPriceProducts(int purchaseCount) {
+        return purchaseCount;
     }
 
     @Override

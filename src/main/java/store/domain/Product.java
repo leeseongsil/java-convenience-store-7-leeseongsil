@@ -23,8 +23,19 @@ public class Product {
         return promotionInventory.countPurchasableProducts() + noPromotionInventory.countPurchasableProducts();
     }
 
-    public int countFreeProductsWhenPurchased(int purchasedCount) {
-        return promotionInventory.countFreeProductsWhenPurchased(purchasedCount);
+    public int countFreeProductsWhenPurchased(int purchaseCount) {
+        return promotionInventory.countFreeProducts(purchaseCount);
+    }
+
+    public boolean isLackPromotionProduct(int purchaseCount) {
+        return promotionInventory.isInPeriod() && promotionInventory.isLackOfProducts(purchaseCount);
+    }
+
+    public int countRegularPriceProducts(int purchaseCount) {
+        int countOfPromotionProduct = promotionInventory.countPurchasableProducts(purchaseCount);
+        int countOfNoPromotionProduct = purchaseCount - countOfPromotionProduct;
+        return promotionInventory.countRemainedRegularPriceProducts(countOfPromotionProduct)
+                + noPromotionInventory.countRemainedRegularPriceProducts(countOfNoPromotionProduct);
     }
 
     public PurchaseHistory buy(int count) {

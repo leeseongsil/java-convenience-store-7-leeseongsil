@@ -39,14 +39,27 @@ public class ProductInventory implements Inventory {
     }
 
     @Override
-    public int countFreeProductsWhenPurchased(int purchaseCount) {
+    public boolean isLackOfProducts(int purchaseCount) {
+        int countOfBenefitedProducts = purchaseCount + countFreeProducts(purchaseCount);
+        return currentCount < countOfBenefitedProducts;
+    }
+
+    @Override
+    public int countFreeProducts(int purchaseCount) {
         if (!isInPeriod() || purchaseCount >= currentCount) {
             return 0;
         }
 
         int remainCount = currentCount - purchaseCount;
-        int promotionFreeCount = promotion.countFreeProductsWhenPurchased(purchaseCount);
+        int promotionFreeCount = promotion.calculateFreeProducts(purchaseCount);
         return Math.min(remainCount, promotionFreeCount);
+    }
+
+    @Override
+    public int countRemainedRegularPriceProducts(int purchaseCount) {
+        int remainCount = currentCount - purchaseCount;
+        int promotionCount =  promotion.calculateRemainedRegularPriceProducts(purchaseCount);
+        return Math.min(remainCount, promotionCount);
     }
 
     @Override

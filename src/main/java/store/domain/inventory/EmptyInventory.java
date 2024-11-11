@@ -21,7 +21,17 @@ public class EmptyInventory implements Inventory {
     }
 
     @Override
-    public int countFreeProductsWhenPurchased(int purchaseCount) {
+    public boolean isLackOfProducts(int purchaseCount) {
+        return true;
+    }
+
+    @Override
+    public int countFreeProducts(int purchaseCount) {
+        return 0;
+    }
+
+    @Override
+    public int countRemainedRegularPriceProducts(int purchaseCount) {
         return 0;
     }
 
