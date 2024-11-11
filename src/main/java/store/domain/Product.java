@@ -1,15 +1,14 @@
 package store.domain;
 
-import store.domain.inventory.ProductInventory;
 import store.domain.result.PurchaseHistory;
 
 public class Product {
 
     private final String name;
-    private final ProductInventory promotionInventory;
-    private final ProductInventory noPromotionInventory;
+    private final Inventory promotionInventory;
+    private final Inventory noPromotionInventory;
 
-    public Product(String name, ProductInventory promotionInventory, ProductInventory noPromotionInventory) {
+    public Product(String name, Inventory promotionInventory, Inventory noPromotionInventory) {
         this.name = name;
         this.promotionInventory = promotionInventory;
         this.noPromotionInventory = noPromotionInventory;
