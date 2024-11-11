@@ -7,5 +7,7 @@ public interface Promotion {
 
     boolean isPromotionPeriod(LocalDate currentDate);
 
+    int countFreeProductsWhenPurchased(int purchaseCount);
+
     PromotionResult calculatePromotion(int count);
 }

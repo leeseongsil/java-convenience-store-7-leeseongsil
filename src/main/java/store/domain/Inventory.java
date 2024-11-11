@@ -6,11 +6,11 @@ public interface Inventory {
 
     boolean isInPeriod();
 
-    boolean isExistProduct();
-
     int countPurchasableProducts();
 
     int countPurchasableProducts(int purchaseCount);
+
+    int countFreeProductsWhenPurchased(int purchaseCount);
 
     PurchaseHistory buy(String name, int count);
 }

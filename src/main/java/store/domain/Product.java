@@ -23,6 +23,10 @@ public class Product {
         return promotionInventory.countPurchasableProducts() + noPromotionInventory.countPurchasableProducts();
     }
 
+    public int countFreeProductsWhenPurchased(int purchasedCount) {
+        return promotionInventory.countFreeProductsWhenPurchased(purchasedCount);
+    }
+
     public PurchaseHistory buy(int count) {
         validateBuying(count);
 

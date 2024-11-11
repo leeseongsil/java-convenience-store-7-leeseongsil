@@ -32,6 +32,17 @@ public class EventPromotion implements Promotion {
     }
 
     @Override
+    public int countFreeProductsWhenPurchased(int purchaseCount) {
+        int countOfBundle = buyCount + GET_COUNT;
+        int remainOfBundle = purchaseCount % countOfBundle;
+
+        if (remainOfBundle < buyCount) {
+            return 0;
+        }
+        return countOfBundle - buyCount;
+    }
+
+    @Override
     public PromotionResult calculatePromotion(int count) {
         int freeCount = count / (buyCount + GET_COUNT);
         int regularCount = count - freeCount;

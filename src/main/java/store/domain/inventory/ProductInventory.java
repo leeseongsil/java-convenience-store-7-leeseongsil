@@ -23,11 +23,6 @@ public class ProductInventory implements Inventory {
     }
 
     @Override
-    public boolean isExistProduct() {
-        return currentCount > 0;
-    }
-
-    @Override
     public int countPurchasableProducts() {
         if (isInPeriod()) {
             return currentCount;
@@ -41,6 +36,17 @@ public class ProductInventory implements Inventory {
             return Math.min(purchaseCount, currentCount);
         }
         return 0;
+    }
+
+    @Override
+    public int countFreeProductsWhenPurchased(int purchaseCount) {
+        if (!isInPeriod() || purchaseCount >= currentCount) {
+            return 0;
+        }
+
+        int remainCount = currentCount - purchaseCount;
+        int promotionFreeCount = promotion.countFreeProductsWhenPurchased(purchaseCount);
+        return Math.min(remainCount, promotionFreeCount);
     }
 
     @Override
