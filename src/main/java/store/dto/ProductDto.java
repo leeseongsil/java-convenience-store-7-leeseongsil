@@ -1,9 +1,6 @@
 package store.dto;
 
-import store.domain.Inventory;
 import store.domain.Product;
-import store.domain.inventory.EmptyInventory;
-import store.domain.inventory.PrintedEmptyInventory;
 
 public record ProductDto(String name, int price, int count, PromotionDto promotionDto) {
 
@@ -19,8 +16,9 @@ public record ProductDto(String name, int price, int count, PromotionDto promoti
     public static class ProductBuilder {
         private final String name;
         private final int price;
-        private InventoryDto discountInventory;
-        private InventoryDto noDiscountInventory;
+        private int promotionCount = 0;
+        private int noPromotionCount = 0;
+        private PromotionDto promotion;
 
         public ProductBuilder(String name, int price) {
             this.name = name;
@@ -28,34 +26,30 @@ public record ProductDto(String name, int price, int count, PromotionDto promoti
         }
 
         public ProductBuilder productDto(ProductDto dto) {
-            if (!dto.name().equals(name)) {
+            if (!dto.name().equals(this.name) || dto.price != this.price) {
                 throw new IllegalArgumentException();
             }
 
             if (dto.isPromoted()) {
-                discountInventory = new InventoryDto(price, dto.count(), dto.promotionDto());
+                promotionCount = dto.count;
+                promotion = dto.promotionDto;
                 return this;
             }
-            noDiscountInventory = new InventoryDto(price, dto.count(), dto.promotionDto());
+            noPromotionCount = dto.count;
             return this;
         }
 
         public Product build() {
-            return new Product(name, createDiscountInventory(), createNoDiscountInventory());
-        }
-
-        private Inventory createDiscountInventory() {
-            if (discountInventory == null) {
-                return new EmptyInventory();
+            if (promotionCount > 0 && noPromotionCount == 0) {
+                return Product.createPromotionedProduct(name, price, promotionCount, promotion.toPromotion());
             }
-            return discountInventory.toInventory();
-        }
-
-        private Inventory createNoDiscountInventory() {
-            if (noDiscountInventory == null) {
-                return new PrintedEmptyInventory(price);
+            if (promotionCount == 0 && noPromotionCount > 0) {
+                return Product.createNoPromotionedProduct(name, price, noPromotionCount);
             }
-            return noDiscountInventory.toInventory();
+            if (promotionCount > 0 && noPromotionCount > 0) {
+                return Product.createProduct(name, price, promotionCount, noPromotionCount, promotion.toPromotion());
+            }
+            throw new IllegalArgumentException();
         }
     }
 }
