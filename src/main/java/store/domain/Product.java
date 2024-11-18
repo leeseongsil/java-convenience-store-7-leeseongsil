@@ -15,7 +15,7 @@ public class Product {
     private final Inventory promotionInventory;
     private final Inventory noPromotionInventory;
 
-    public Product(Inventory promotionInventory, Inventory noPromotionInventory) {
+    private Product(Inventory promotionInventory, Inventory noPromotionInventory) {
         this.promotionInventory = promotionInventory;
         this.noPromotionInventory = noPromotionInventory;
     }
@@ -80,7 +80,7 @@ public class Product {
 
     public List<ProductResponseDto> getProductResponses() {
         return Stream.of(promotionInventory, noPromotionInventory)
-                .map(inventory -> inventory.getProductResponse())
+                .map(Inventory::getProductResponse)
                 .flatMap(Optional::stream)
                 .toList();
     }
