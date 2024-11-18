@@ -16,25 +16,33 @@ public class Application {
         OutputView.printProducts(STORE.getProductResponses());
 
         RequireDetails requireDetails = retryWhenThrowException(Application::inputRequireDetails);
-
-        for (RequireDetail detail : requireDetails.details()) {
-            String productName = detail.getName();
-            int countOfFreeProducts = STORE.countFreeProductsWhenPurchased(detail);
-            if (countOfFreeProducts > 0 && InputView.inputCanPromote(productName, countOfFreeProducts)) {
-                detail.plus(countOfFreeProducts);
-            }
-        }
-
-        for (RequireDetail detail : requireDetails.details()) {
-            String productName = detail.getName();
-            int countOfNonPromotedProduct = STORE.countRegularPriceProducts(detail);
-            if (STORE.isLackPromotionProduct(detail) && countOfNonPromotedProduct > 0
-                    && InputView.inputCanPromote(productName, countOfNonPromotedProduct)) {
-                detail.minus(countOfNonPromotedProduct);
-            }
-        }
+        requireDetails.details().forEach(Application::requestFreeProductWhenPurchased);
+        requireDetails.details().forEach(Application::progressPurchaseWhenNotPromoted);
 
         boolean isDiscountMembership = InputView.inputUsingMembership();
+        printReceipt(requireDetails, isDiscountMembership);
+    }
+
+    private static void requestFreeProductWhenPurchased(RequireDetail detail) {
+        String productName = detail.getName();
+        int countOfFreeProducts = STORE.countFreeProductsWhenPurchased(detail);
+        if (countOfFreeProducts > 0
+                && retryWhenThrowException(() -> InputView.inputCanPromote(productName, countOfFreeProducts))) {
+            detail.plus(countOfFreeProducts);
+        }
+    }
+
+    private static void progressPurchaseWhenNotPromoted(RequireDetail detail) {
+        String productName = detail.getName();
+        int countOfNonPromotedProduct = STORE.countRegularPriceProducts(detail);
+        if (STORE.isLackPromotionProduct(detail) && countOfNonPromotedProduct > 0
+                && retryWhenThrowException(
+                () -> InputView.inputProgressPurchaseWhenNotPromoted(productName, countOfNonPromotedProduct))) {
+            detail.minus(countOfNonPromotedProduct);
+        }
+    }
+
+    private static void printReceipt(RequireDetails requireDetails, boolean isDiscountMembership) {
         Receipt receipt = STORE.buy(requireDetails, isDiscountMembership);
         OutputView.printReceipt(receipt);
     }
