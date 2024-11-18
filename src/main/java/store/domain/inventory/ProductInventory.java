@@ -9,13 +9,15 @@ import store.dto.ProductResponseDto;
 
 public class ProductInventory implements Inventory {
 
-    private final Promotion promotion;
+    private final String name;
     private final int price;
+    private final Promotion promotion;
     private int currentCount;
 
-    public ProductInventory(Promotion promotion, int price, int currentCount) {
-        this.promotion = promotion;
+    public ProductInventory(String name, int price, Promotion promotion, int currentCount) {
+        this.name = name;
         this.price = price;
+        this.promotion = promotion;
         this.currentCount = currentCount;
     }
 
@@ -65,7 +67,7 @@ public class ProductInventory implements Inventory {
     }
 
     @Override
-    public PurchaseHistory buy(String name, int count) {
+    public PurchaseHistory buy(int count) {
         validateBuying(count);
         if (!isInPeriod()) {
             return PurchaseHistory.emptyHistory(name);
@@ -85,7 +87,7 @@ public class ProductInventory implements Inventory {
     }
 
     @Override
-    public Optional<ProductResponseDto> getProductResponse(String productName) {
-        return Optional.of(new ProductResponseDto(productName, price, currentCount, promotion.getName()));
+    public Optional<ProductResponseDto> getProductResponse() {
+        return Optional.of(new ProductResponseDto(name, price, currentCount, promotion.getName()));
     }
 }

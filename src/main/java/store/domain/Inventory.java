@@ -18,7 +18,7 @@ public interface Inventory {
 
     int countRemainedRegularPriceProducts(int purchaseCount);
 
-    PurchaseHistory buy(String name, int count);
+    PurchaseHistory buy(int count);
 
-    Optional<ProductResponseDto> getProductResponse(String productName);
+    Optional<ProductResponseDto> getProductResponse();
 }

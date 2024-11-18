@@ -19,9 +19,7 @@ class ProductTest {
 
     @Test
     void canBuyTest_hasEqualOrMoreThanNeed_returnTrue() {
-        ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
-        Product product = new Product("상품", promotionInventory, noPromotionInventory);
+        Product product = Product.createProduct("name", 1_000, 3, 2, ONE_PLUS_ONE);
 
         boolean actual = product.canBuy(5);
 
@@ -30,9 +28,7 @@ class ProductTest {
 
     @Test
     void canBuyTest_hasLessThanNeed_returnFalse() {
-        ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
-        Product product = new Product("상품", promotionInventory, noPromotionInventory);
+        Product product = Product.createProduct("name", 1_000, 3, 2, ONE_PLUS_ONE);
 
         boolean actual = product.canBuy(6);
 
@@ -40,21 +36,8 @@ class ProductTest {
     }
 
     @Test
-    void buyTest_hasEqualOrMoreThanNeed() {
-        ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
-        Product product = new Product("상품", promotionInventory, noPromotionInventory);
-
-        product.buy(3);
-
-        // TODO assert 문 추가
-    }
-
-    @Test
     void buyTest_hasLessThanNeed_throwException() {
-        ProductInventory promotionInventory = new ProductInventory(ONE_PLUS_ONE, 1_000, 3);
-        ProductInventory noPromotionInventory = new ProductInventory(REGULAR_PRICE, 1_000, 2);
-        Product product = new Product("상품", promotionInventory, noPromotionInventory);
+        Product product = Product.createProduct("name", 1_000, 3, 2, ONE_PLUS_ONE);
 
         assertThatThrownBy(() -> product.buy(6))
                 .isInstanceOf(IllegalStateException.class)

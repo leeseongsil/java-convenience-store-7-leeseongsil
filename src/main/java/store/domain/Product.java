@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import store.domain.inventory.EmptyInventory;
-import store.domain.inventory.PrintedEmptyInventory;
 import store.domain.inventory.ProductInventory;
 import store.domain.inventory.Promotion;
 import store.domain.promotion.RegularPricePromotion;
@@ -13,30 +12,31 @@ import store.dto.ProductResponseDto;
 
 public class Product {
 
-    private final String name;
     private final Inventory promotionInventory;
     private final Inventory noPromotionInventory;
 
-    public Product(String name, Inventory promotionInventory, Inventory noPromotionInventory) {
-        this.name = name;
+    public Product(Inventory promotionInventory, Inventory noPromotionInventory) {
         this.promotionInventory = promotionInventory;
         this.noPromotionInventory = noPromotionInventory;
     }
 
     public static Product createPromotionedProduct(String name, int price, int count, Promotion promotion) {
-        return new Product(name, new ProductInventory(promotion, price, count), new EmptyInventory());
+        return new Product(
+                new ProductInventory(name, price, promotion, count),
+                new EmptyInventory(name, price, true));
     }
 
     public static Product createNoPromotionedProduct(String name, int price, int count) {
-        return new Product(name, new PrintedEmptyInventory(price),
-                new ProductInventory(new RegularPricePromotion(), price, count));
+        return new Product(
+                new EmptyInventory(name, price, false),
+                new ProductInventory(name, price, new RegularPricePromotion(), count));
     }
 
     public static Product createProduct(String name, int price, int promotedCount, int noPromotedCount,
                                         Promotion promotion) {
-        return new Product(name,
-                new ProductInventory(promotion, price, promotedCount),
-                new ProductInventory(new RegularPricePromotion(), price, noPromotedCount));
+        return new Product(
+                new ProductInventory(name, price, promotion, promotedCount),
+                new ProductInventory(name, price, new RegularPricePromotion(), noPromotedCount));
     }
 
     public boolean canBuy(int count) {
@@ -67,8 +67,8 @@ public class Product {
 
         int countOfPromotionProduct = promotionInventory.countPurchasableProducts(count);
         int countOfNoPromotionProduct = count - countOfPromotionProduct;
-        PurchaseHistory promotionPurchaseHistory = promotionInventory.buy(name, countOfPromotionProduct);
-        PurchaseHistory noPromotionPurchaseHistory = noPromotionInventory.buy(name, countOfNoPromotionProduct);
+        PurchaseHistory promotionPurchaseHistory = promotionInventory.buy(countOfPromotionProduct);
+        PurchaseHistory noPromotionPurchaseHistory = noPromotionInventory.buy(countOfNoPromotionProduct);
         return promotionPurchaseHistory.join(noPromotionPurchaseHistory);
     }
 
@@ -80,7 +80,7 @@ public class Product {
 
     public List<ProductResponseDto> getProductResponses() {
         return Stream.of(promotionInventory, noPromotionInventory)
-                .map(inventory -> inventory.getProductResponse(name))
+                .map(inventory -> inventory.getProductResponse())
                 .flatMap(Optional::stream)
                 .toList();
     }
