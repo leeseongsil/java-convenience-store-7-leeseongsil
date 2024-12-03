@@ -40,7 +40,10 @@ public class InStockPromotionInventory implements PromotionInventory {
 
     @Override
     public boolean isLackPromotionQuantity(int purchaseQuantity) {
-        return purchaseQuantity + promotion.countAddableFreeCount(purchaseQuantity) > quantity;
+        if (promotion.isPromotionPeriod()) {
+            return purchaseQuantity + promotion.countAddableFreeCount(purchaseQuantity) > quantity;
+        }
+        return false;
     }
 
     @Override

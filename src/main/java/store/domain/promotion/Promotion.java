@@ -20,14 +20,23 @@ public class Promotion {
     }
 
     public int countFreeQuantity(int purchaseCount) {
-        return type.countFreeQuantity(purchaseCount);
+        if (isPromotionPeriod()) {
+            return type.countFreeQuantity(purchaseCount);
+        }
+        return 0;
     }
 
     public int countAddableFreeCount(int purchaseCount) {
-        return type.countAddableFreeCount(purchaseCount);
+        if (isPromotionPeriod()) {
+            return type.countAddableFreeCount(purchaseCount);
+        }
+        return 0;
     }
 
     public int countAppliedPromotionQuantity(int currentQuantity) {
-        return type.countAppliedPromotionQuantity(currentQuantity);
+        if (isPromotionPeriod()) {
+            return type.countAppliedPromotionQuantity(currentQuantity);
+        }
+        return 0;
     }
 }
