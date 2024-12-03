@@ -17,6 +17,10 @@ public class Product {
         return count >= totalQuantity;
     }
 
+    public int countFreeProductsWhenPurchase(int purchaseCount) {
+        return promotionInventory.countAddableFreeProductsWhenPurchase(purchaseCount);
+    }
+
     public PurchaseHistory buy(int count) {
         validateBuying(count);
 

@@ -16,15 +16,33 @@ public enum PromotionType {
     }
 
     public static PromotionType of(int getCount, int freeCount) {
-       return Arrays.stream(PromotionType.values())
+        return Arrays.stream(PromotionType.values())
                 .filter(type -> type.freeCount == freeCount && type.getCount == getCount)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid promotion type"));
     }
 
     public int countFreeQuantity(int purchaseCount) {
-        int countOfSet = purchaseCount / (getCount + freeCount);
-        int remain = purchaseCount % (getCount + freeCount);
-        return (countOfSet * freeCount) + Math.min(remain - getCount, 0);
+        return (countOfSet(purchaseCount) * freeCount)
+                + Math.min(remain(purchaseCount) - getCount, 0);
+    }
+
+    public int countAddableFreeCount(int purchaseCount) {
+        if (remain(purchaseCount) < getCount) {
+            return 0;
+        }
+        return setSize() - remain(purchaseCount);
+    }
+
+    private int setSize() {
+        return getCount + freeCount;
+    }
+
+    private int countOfSet(int purchaseCount) {
+        return purchaseCount / setSize();
+    }
+
+    private int remain(int purchaseCount) {
+        return purchaseCount % setSize();
     }
 }

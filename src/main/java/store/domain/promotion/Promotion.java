@@ -22,4 +22,8 @@ public class Promotion {
     public int countFreeQuantity(int purchaseCount) {
         return type.countFreeQuantity(purchaseCount);
     }
+
+    public int countAddableFreeCount(int purchaseCount) {
+        return type.countAddableFreeCount(purchaseCount);
+    }
 }

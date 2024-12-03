@@ -27,4 +27,9 @@ public class EmptyPromotionInventory implements PromotionInventory {
     public PurchaseHistory buy(int quantity) {
         return new PurchaseHistory(name, perPrice, 0);
     }
+
+    @Override
+    public int countAddableFreeProductsWhenPurchase(int purchaseCount) {
+        return 0;
+    }
 }

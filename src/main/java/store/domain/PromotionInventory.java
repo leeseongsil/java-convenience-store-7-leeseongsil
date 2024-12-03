@@ -9,4 +9,6 @@ public interface PromotionInventory {
     int countPurchasableQuantity();
 
     PurchaseHistory buy(int quantity);
+
+    int countAddableFreeProductsWhenPurchase(int purchaseCount);
 }

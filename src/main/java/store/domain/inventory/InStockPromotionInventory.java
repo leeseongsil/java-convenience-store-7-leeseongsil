@@ -33,6 +33,12 @@ public class InStockPromotionInventory implements PromotionInventory {
     }
 
     @Override
+    public int countAddableFreeProductsWhenPurchase(int purchaseCount) {
+        int afterPurchasableQuantity = Math.max(countPurchasableQuantity(purchaseCount) - purchaseCount, 0);
+        return Math.min(promotion.countAddableFreeCount(purchaseCount), afterPurchasableQuantity);
+    }
+
+    @Override
     public PurchaseHistory buy(int quantity) {
         if (promotion.isPromotionPeriod()) {
             int freeCount = promotion.countFreeQuantity(quantity);
