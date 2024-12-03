@@ -18,4 +18,8 @@ public class Promotion {
     public boolean isPromotionPeriod() {
         return period.contains(DateTimes.now().toLocalDate());
     }
+
+    public int countFreeQuantity(int purchaseCount) {
+        return type.countFreeQuantity(purchaseCount);
+    }
 }

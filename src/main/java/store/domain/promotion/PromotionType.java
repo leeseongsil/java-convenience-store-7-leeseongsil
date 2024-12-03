@@ -22,11 +22,9 @@ public enum PromotionType {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid promotion type"));
     }
 
-    public int getGetCount() {
-        return getCount;
-    }
-
-    public int getFreeCount() {
-        return freeCount;
+    public int countFreeQuantity(int purchaseCount) {
+        int countOfSet = purchaseCount / (getCount + freeCount);
+        int remain = purchaseCount % (getCount + freeCount);
+        return (countOfSet * freeCount) + Math.min(remain - getCount, 0);
     }
 }
