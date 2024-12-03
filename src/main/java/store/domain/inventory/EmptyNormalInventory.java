@@ -9,6 +9,7 @@ public class EmptyNormalInventory implements NormalInventory {
     private final int perPrice;
 
     public EmptyNormalInventory(String name, int perPrice) {
+        // TODO 유효성 검사 (price)
         this.name = name;
         this.perPrice = perPrice;
     }

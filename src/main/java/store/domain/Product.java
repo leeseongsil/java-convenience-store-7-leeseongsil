@@ -12,13 +12,23 @@ public class Product {
         this.normalInventory = normalInventory;
     }
 
-    public boolean canBuy(int count) {
-        int totalQuantity = promotionInventory.countPurchasableQuantity() + normalInventory.countQuantity();
-        return count >= totalQuantity;
+    public boolean canBuy(int purchaseQuantity) {
+        return purchaseQuantity <= totalQuantity();
     }
 
-    public int countFreeProductsWhenPurchase(int purchaseCount) {
-        return promotionInventory.countAddableFreeProductsWhenPurchase(purchaseCount);
+    public int countAddableFreeProducts(int purchaseQuantity) {
+        validateBuying(purchaseQuantity);
+        return promotionInventory.countAddableFreeProducts(purchaseQuantity);
+    }
+
+    public boolean isLackPromotionQuantity(int purchaseQuantity) {
+        validateBuying(purchaseQuantity);
+        return promotionInventory.isLackPromotionQuantity(purchaseQuantity);
+    }
+
+    public int countRegularPriceQuantity(int purchaseQuantity) {
+        validateBuying(purchaseQuantity);
+        return promotionInventory.countRegularPriceQuantity(purchaseQuantity);
     }
 
     public PurchaseHistory buy(int count) {
@@ -31,10 +41,15 @@ public class Product {
         return promotionPurchaseHistory.join(normalPurchaseHistory);
     }
 
-    private void validateBuying(int count) {
-        if (canBuy(count)) {
-            return;
+    private void validateBuying(int purchaseQuantity) {
+        int totalQuantity = totalQuantity();
+        if (purchaseQuantity > totalQuantity) {
+            throw new IllegalStateException(
+                    "Too Many Purchases purchased : %d, totol : %d".formatted(purchaseQuantity, totalQuantity));
         }
-        throw new IllegalStateException("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+    }
+
+    private int totalQuantity() {
+        return promotionInventory.countPurchasableQuantity() + normalInventory.countQuantity();
     }
 }

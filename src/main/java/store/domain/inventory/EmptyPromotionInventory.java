@@ -9,12 +9,13 @@ public class EmptyPromotionInventory implements PromotionInventory {
     private final int perPrice;
 
     public EmptyPromotionInventory(String name, int price) {
+        // TODO 유효성 검사 (price)
         this.name = name;
         this.perPrice = price;
     }
 
     @Override
-    public int countPurchasableQuantity(int purchaseCount) {
+    public int countPurchasableQuantity(int purchaseQuantity) {
         return 0;
     }
 
@@ -24,12 +25,22 @@ public class EmptyPromotionInventory implements PromotionInventory {
     }
 
     @Override
-    public PurchaseHistory buy(int quantity) {
-        return new PurchaseHistory(name, perPrice, 0);
+    public int countAddableFreeProducts(int purchaseQuantity) {
+        return 0;
     }
 
     @Override
-    public int countAddableFreeProductsWhenPurchase(int purchaseCount) {
-        return 0;
+    public boolean isLackPromotionQuantity(int purchaseQuantity) {
+        return false;
+    }
+
+    @Override
+    public int countRegularPriceQuantity(int purchaseQuantity) {
+        return purchaseQuantity;
+    }
+
+    @Override
+    public PurchaseHistory buy(int quantity) {
+        return new PurchaseHistory(name, perPrice, 0);
     }
 }

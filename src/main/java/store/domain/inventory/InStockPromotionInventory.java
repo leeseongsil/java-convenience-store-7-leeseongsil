@@ -20,8 +20,8 @@ public class InStockPromotionInventory implements PromotionInventory {
     }
 
     @Override
-    public int countPurchasableQuantity(int purchaseCount) {
-        return Math.min(purchaseCount, countPurchasableQuantity());
+    public int countPurchasableQuantity(int purchaseQuantity) {
+        return Math.min(purchaseQuantity, countPurchasableQuantity());
     }
 
     @Override
@@ -33,9 +33,20 @@ public class InStockPromotionInventory implements PromotionInventory {
     }
 
     @Override
-    public int countAddableFreeProductsWhenPurchase(int purchaseCount) {
-        int afterPurchasableQuantity = Math.max(countPurchasableQuantity(purchaseCount) - purchaseCount, 0);
-        return Math.min(promotion.countAddableFreeCount(purchaseCount), afterPurchasableQuantity);
+    public int countAddableFreeProducts(int purchaseQuantity) {
+        int afterPurchasableQuantity = Math.max(countPurchasableQuantity(purchaseQuantity) - purchaseQuantity, 0);
+        return Math.min(promotion.countAddableFreeCount(purchaseQuantity), afterPurchasableQuantity);
+    }
+
+    @Override
+    public boolean isLackPromotionQuantity(int purchaseQuantity) {
+        return purchaseQuantity + promotion.countAddableFreeCount(purchaseQuantity) > quantity;
+    }
+
+    @Override
+    public int countRegularPriceQuantity(int purchaseQuantity) {
+        int appliedPromotionQuantity = promotion.countAppliedPromotionQuantity(purchaseQuantity);
+        return Math.max(purchaseQuantity - appliedPromotionQuantity, 0);
     }
 
     @Override

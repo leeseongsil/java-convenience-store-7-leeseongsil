@@ -34,6 +34,10 @@ public enum PromotionType {
         return setSize() - remain(purchaseCount);
     }
 
+    public int countAppliedPromotionQuantity(int currentQuantity) {
+        return currentQuantity - remain(currentQuantity);
+    }
+
     private int setSize() {
         return getCount + freeCount;
     }

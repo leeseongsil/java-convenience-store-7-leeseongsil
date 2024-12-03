@@ -4,11 +4,15 @@ import store.domain.receipt.PurchaseHistory;
 
 public interface PromotionInventory {
 
-    int countPurchasableQuantity(int purchaseCount);
+    int countPurchasableQuantity(int purchaseQuantity);
 
     int countPurchasableQuantity();
 
-    PurchaseHistory buy(int quantity);
+    int countAddableFreeProducts(int purchaseQuantity);
 
-    int countAddableFreeProductsWhenPurchase(int purchaseCount);
+    boolean isLackPromotionQuantity(int purchaseQuantity);
+
+    int countRegularPriceQuantity(int purchaseQuantity);
+
+    PurchaseHistory buy(int quantity);
 }

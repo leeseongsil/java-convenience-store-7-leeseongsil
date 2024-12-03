@@ -9,10 +9,10 @@ public class InStockNormalInventory implements NormalInventory {
     private final int perPrice;
     private int quantity;
 
-    public InStockNormalInventory(String name, int perPrice, int quantity) {
+    public InStockNormalInventory(String name, int price, int quantity) {
         // TODO 유효성 검사 (price, quantity)
         this.name = name;
-        this.perPrice = perPrice;
+        this.perPrice = price;
         this.quantity = quantity;
     }
 
