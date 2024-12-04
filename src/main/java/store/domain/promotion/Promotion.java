@@ -33,9 +33,9 @@ public class Promotion {
         return 0;
     }
 
-    public int countAppliedPromotionQuantity(int currentQuantity) {
+    public int countAppliedPromotionQuantity(int quantity) {
         if (isPromotionPeriod()) {
-            return type.countAppliedPromotionQuantity(currentQuantity);
+            return type.countAppliedPromotionQuantity(quantity);
         }
         return 0;
     }

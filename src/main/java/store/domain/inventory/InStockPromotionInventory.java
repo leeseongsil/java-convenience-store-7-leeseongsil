@@ -55,12 +55,16 @@ public class InStockPromotionInventory implements PromotionInventory {
     @Override
     public PurchaseHistory buy(int quantity) {
         if (promotion.isPromotionPeriod()) {
-            int freeCount = promotion.countFreeQuantity(quantity);
-            PurchaseHistory purchaseHistory = new PurchaseHistory(name, perPrice, quantity, freeCount);
-
+            PurchaseHistory purchaseHistory = createPurchaseHistory(quantity);
             this.quantity -= quantity;
             return purchaseHistory;
         }
         return PurchaseHistory.emptyHistory(name, perPrice);
+    }
+
+    private PurchaseHistory createPurchaseHistory(int quantity) {
+        int freeQuantity = promotion.countFreeQuantity(quantity);
+        int appliedPromotionQuantity = promotion.countAppliedPromotionQuantity(quantity);
+        return new PurchaseHistory(name, perPrice, quantity, appliedPromotionQuantity, freeQuantity);
     }
 }
