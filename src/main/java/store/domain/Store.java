@@ -2,6 +2,7 @@ package store.domain;
 
 import java.util.List;
 import java.util.Map;
+import store.domain.dto.InventoryOutputDto;
 import store.domain.receipt.PurchaseHistories;
 import store.domain.receipt.PurchaseHistory;
 import store.domain.receipt.Receipt;
@@ -20,7 +21,13 @@ public class Store {
         this(products, new MembershipDiscount());
     }
 
-    public boolean canBuy(String name, int quantity) {
+    public boolean canBuy(Map<String, Integer> requires) {
+        return requires.entrySet()
+                .stream()
+                .allMatch(entry -> canBuy(entry.getKey(), entry.getValue()));
+    }
+
+    private boolean canBuy(String name, int quantity) {
         return getProduct(name).canBuy(quantity);
     }
 
@@ -52,5 +59,13 @@ public class Store {
             return products.get(name);
         }
         throw new IllegalArgumentException("Product " + name + " not found");
+    }
+
+    public List<InventoryOutputDto> getInventories() {
+        return products.values()
+                .stream()
+                .map(Product::getInventories)
+                .flatMap(List::stream)
+                .toList();
     }
 }

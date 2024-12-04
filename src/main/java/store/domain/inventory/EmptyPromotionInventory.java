@@ -1,6 +1,8 @@
 package store.domain.inventory;
 
+import java.util.Optional;
 import store.domain.PromotionInventory;
+import store.domain.dto.InventoryOutputDto;
 import store.domain.receipt.PurchaseHistory;
 
 public class EmptyPromotionInventory implements PromotionInventory {
@@ -42,5 +44,10 @@ public class EmptyPromotionInventory implements PromotionInventory {
     @Override
     public PurchaseHistory buy(int quantity) {
         return new PurchaseHistory(name, perPrice, 0);
+    }
+
+    @Override
+    public Optional<InventoryOutputDto> getStatus() {
+        return Optional.empty();
     }
 }

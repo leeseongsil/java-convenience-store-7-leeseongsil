@@ -1,6 +1,8 @@
 package store.domain.inventory;
 
+import java.util.Optional;
 import store.domain.PromotionInventory;
+import store.domain.dto.InventoryOutputDto;
 import store.domain.promotion.Promotion;
 import store.domain.receipt.PurchaseHistory;
 
@@ -34,7 +36,7 @@ public class InStockPromotionInventory implements PromotionInventory {
 
     @Override
     public int countAddableFreeProducts(int purchaseQuantity) {
-        int afterPurchasableQuantity = Math.max(countPurchasableQuantity(purchaseQuantity) - purchaseQuantity, 0);
+        int afterPurchasableQuantity = Math.max(countPurchasableQuantity() - purchaseQuantity, 0);
         return Math.min(promotion.countAddableFreeCount(purchaseQuantity), afterPurchasableQuantity);
     }
 
@@ -66,5 +68,10 @@ public class InStockPromotionInventory implements PromotionInventory {
         int freeQuantity = promotion.countFreeQuantity(quantity);
         int appliedPromotionQuantity = promotion.countAppliedPromotionQuantity(quantity);
         return new PurchaseHistory(name, perPrice, quantity, appliedPromotionQuantity, freeQuantity);
+    }
+
+    @Override
+    public Optional<InventoryOutputDto> getStatus() {
+        return Optional.of(new InventoryOutputDto(name, perPrice, quantity, promotion.getName()));
     }
 }

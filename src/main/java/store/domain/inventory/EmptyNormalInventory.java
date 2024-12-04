@@ -1,6 +1,8 @@
 package store.domain.inventory;
 
+import java.util.Optional;
 import store.domain.NormalInventory;
+import store.domain.dto.InventoryOutputDto;
 import store.domain.receipt.PurchaseHistory;
 
 public class EmptyNormalInventory implements NormalInventory {
@@ -22,5 +24,10 @@ public class EmptyNormalInventory implements NormalInventory {
     @Override
     public PurchaseHistory buy(int quantity) {
         return PurchaseHistory.emptyHistory(name, perPrice);
+    }
+
+    @Override
+    public Optional<InventoryOutputDto> getStatus() {
+        return Optional.of(new InventoryOutputDto(name, perPrice, 0));
     }
 }

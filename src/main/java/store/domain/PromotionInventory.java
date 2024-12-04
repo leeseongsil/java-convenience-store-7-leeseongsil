@@ -1,5 +1,7 @@
 package store.domain;
 
+import java.util.Optional;
+import store.domain.dto.InventoryOutputDto;
 import store.domain.receipt.PurchaseHistory;
 
 public interface PromotionInventory {
@@ -15,4 +17,6 @@ public interface PromotionInventory {
     int countRegularPriceQuantity(int purchaseQuantity);
 
     PurchaseHistory buy(int quantity);
+
+    Optional<InventoryOutputDto> getStatus();
 }

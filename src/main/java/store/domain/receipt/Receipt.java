@@ -12,27 +12,23 @@ public class Receipt {
         this.membershipDiscountAmount = membershipDiscountAmount;
     }
 
-    public int calculateTotalCount() {
+    public int getTotalCount() {
         return histories.calculateTotalCount();
     }
 
-    public int calculateTotalRegularPrice() {
+    public int getTotalRegularPrice() {
         return histories.calculateTotalRegularPrice();
     }
 
-    public int calculateTotalPromotionDiscountPrice() {
+    public int getTotalPromotionDiscountPrice() {
         return histories.calculateTotalPromotionDiscountPrice();
     }
 
-    public int calculateNotAppliedPromotionPrice() {
+    public int getNotAppliedPromotionPrice() {
         return histories.calculateNotAppliedPromotionPrice();
     }
 
-    public int calculateTotalFinalPrice() {
-        return histories.calculateTotalFinalPrice();
-    }
-
-    public int calculateFinalPrice() {
+    public int getFinalPrice() {
         return histories.calculateTotalFinalPrice() - membershipDiscountAmount;
     }
 

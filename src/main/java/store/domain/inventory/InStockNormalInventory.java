@@ -1,6 +1,8 @@
 package store.domain.inventory;
 
+import java.util.Optional;
 import store.domain.NormalInventory;
+import store.domain.dto.InventoryOutputDto;
 import store.domain.receipt.PurchaseHistory;
 
 public class InStockNormalInventory implements NormalInventory {
@@ -35,5 +37,10 @@ public class InStockNormalInventory implements NormalInventory {
             return;
         }
         throw new IllegalStateException("Not enough quantity");
+    }
+
+    @Override
+    public Optional<InventoryOutputDto> getStatus() {
+        return Optional.of(new InventoryOutputDto(name, perPrice, quantity));
     }
 }
