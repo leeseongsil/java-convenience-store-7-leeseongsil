@@ -71,13 +71,13 @@ public class OutputView {
     }
 
     private static String toReceiptResultView(Receipt receipt) {
-        StringBuilder sb = new StringBuilder()
+        return new StringBuilder()
                 .append("%-10s\t%-6d\t%,6d%n".formatted("총구매액", receipt.getTotalCount(),
                         receipt.getTotalRegularPrice()))
-                .append("%-15s\t%,6d%n".formatted("행사할인", -receipt.getTotalPromotionDiscountPrice()))
-                .append("%-15s\t%,6d%n".formatted("멤버십할인", -receipt.getMembershipDiscountAmount()))
-                .append("%-15s\t%,6d%n".formatted("내실돈", receipt.getFinalPrice()));
-        return sb.toString();
+                .append("%-15s\t-%,6d%n".formatted("행사할인", receipt.getTotalPromotionDiscountPrice()))
+                .append("%-15s\t-%,6d%n".formatted("멤버십할인", receipt.getMembershipDiscountAmount()))
+                .append("%-15s\t%,6d%n".formatted("내실돈", receipt.getFinalPrice()))
+                .toString();
     }
 
     public static void printExceptionMessage(Exception exception) {

@@ -11,56 +11,61 @@ import store.view.OutputView;
 
 public class Application {
 
-    private static final Store STORE = InputView.inputStore().toStore();
-
-    private Application() {
+    public static void main(String[] args) {
+        new Application().run();
     }
 
-    public static void main(String[] args) {
-        do {
-            OutputView.printProducts(STORE.getInventories());
+    private final Store store;
 
-            RequireDetails requireDetails = retryWhenThrowException(Application::inputRequireDetails);
-            requireDetails.getDetails().forEach(Application::requestFreeProductWhenPurchased);
-            requireDetails.getDetails().forEach(Application::progressPurchaseWhenNotPromoted);
+    private Application() {
+        this.store = InputView.inputStore().toStore();
+    }
+
+    public void run() {
+        do {
+            OutputView.printProducts(store.getInventories());
+
+            RequireDetails requireDetails = retryWhenThrowException(this::inputRequireDetails);
+            requireDetails.getDetails().forEach(this::requestFreeProductWhenPurchased);
+            requireDetails.getDetails().forEach(this::progressPurchaseWhenNotPromoted);
 
             boolean isDiscountMembership = InputView.inputUsingMembership();
             printReceipt(requireDetails, isDiscountMembership);
         } while (InputView.inputPurchaseAgain());
     }
 
-    private static RequireDetails inputRequireDetails() {
+    private RequireDetails inputRequireDetails() {
         Map<String, Integer> requires = InputView.inputPurchaseProducts();
-        if (!STORE.canBuy(requires)) {
+        if (!store.canBuy(requires)) {
             throw new IllegalArgumentException("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
         return new RequireDetails(requires);
     }
 
-    private static void requestFreeProductWhenPurchased(RequireDetail detail) {
-        int countOfFreeProducts = STORE.countAddableFreeProducts(detail.getName(), detail.getQuantity());
+    private void requestFreeProductWhenPurchased(RequireDetail detail) {
+        int countOfFreeProducts = store.countAddableFreeProducts(detail.getName(), detail.getQuantity());
         if (countOfFreeProducts > 0
                 && InputView.inputCanAdd(detail.getName(), countOfFreeProducts)) {
             detail.plus(countOfFreeProducts);
         }
     }
 
-    private static void progressPurchaseWhenNotPromoted(RequireDetail detail) {
+    private void progressPurchaseWhenNotPromoted(RequireDetail detail) {
         String productName = detail.getName();
-        int countOfNonPromotedProduct = STORE.countRegularPriceQuantity(detail.getName(), detail.getQuantity());
-        if (STORE.isLackPromotionQuantity(detail.getName(), detail.getQuantity())
+        int countOfNonPromotedProduct = store.countRegularPriceQuantity(detail.getName(), detail.getQuantity());
+        if (store.isLackPromotionQuantity(detail.getName(), detail.getQuantity())
                 && countOfNonPromotedProduct > 0
-                && InputView.inputProgressPurchaseWhenNotPromoted(productName, countOfNonPromotedProduct)) {
+                && !InputView.inputProgressPurchaseWhenNotPromoted(productName, countOfNonPromotedProduct)) {
             detail.minus(countOfNonPromotedProduct);
         }
     }
 
-    private static void printReceipt(RequireDetails requireDetails, boolean isDiscountMembership) {
-        Receipt receipt = STORE.buy(requireDetails.toMap(), isDiscountMembership);
+    private void printReceipt(RequireDetails requireDetails, boolean isDiscountMembership) {
+        Receipt receipt = store.buy(requireDetails.toMap(), isDiscountMembership);
         OutputView.printReceipt(receipt);
     }
 
-    private static <T> T retryWhenThrowException(Supplier<T> supplier) {
+    private <T> T retryWhenThrowException(Supplier<T> supplier) {
         while (true) {
             try {
                 return supplier.get();

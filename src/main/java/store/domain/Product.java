@@ -21,16 +21,6 @@ public class Product {
         this.normalInventory = normalInventory;
     }
 
-    public static Product normalInventory(String name, int price, int quantity) {
-        return new Product(new EmptyPromotionInventory(name, price), new InStockNormalInventory(name, price, quantity));
-    }
-
-    public static Product promotionInventory(String name, int price, int quantity, Promotion promotion) {
-        return new Product(
-                new InStockPromotionInventory(name, price, quantity, promotion),
-                new EmptyNormalInventory(name, price));
-    }
-
     public boolean canBuy(int purchaseQuantity) {
         return purchaseQuantity <= totalQuantity();
     }
@@ -47,7 +37,10 @@ public class Product {
 
     public int countRegularPriceQuantity(int purchaseQuantity) {
         validateBuying(purchaseQuantity);
-        return promotionInventory.countRegularPriceQuantity(purchaseQuantity);
+
+        int promotionCount = promotionInventory.countPurchasableQuantity(purchaseQuantity);
+        int normalCount = purchaseQuantity - promotionCount;
+        return promotionInventory.countRegularPriceQuantity(promotionCount) + normalCount;
     }
 
     public PurchaseHistory buy(int count) {

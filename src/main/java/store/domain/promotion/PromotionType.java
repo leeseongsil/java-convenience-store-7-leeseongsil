@@ -24,7 +24,7 @@ public enum PromotionType {
 
     public int countFreeQuantity(int purchaseCount) {
         return (countOfSet(purchaseCount) * freeCount)
-                + Math.min(remain(purchaseCount) - getCount, 0);
+                + Math.max(remain(purchaseCount) - getCount, 0);
     }
 
     public int countAddableFreeCount(int purchaseCount) {
